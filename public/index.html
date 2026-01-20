@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UIDAI Analytics Hub</title>
+    <style>
+      :root {
+        --bg1: #667eea;
+        --bg2: #764ba2;
+        --card: rgba(255, 255, 255, 0.12);
+        --border: rgba(255, 255, 255, 0.22);
+        --text: rgba(255, 255, 255, 0.92);
+        --muted: rgba(255, 255, 255, 0.78);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+        color: var(--text);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 32px;
+      }
+      .card {
+        width: min(900px, 100%);
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 28px;
+        backdrop-filter: blur(12px);
+        box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
+      }
+      h1 { margin: 0 0 8px 0; font-size: 34px; letter-spacing: -0.02em; }
+      p { margin: 10px 0; line-height: 1.5; color: var(--muted); }
+      code {
+        background: rgba(0,0,0,0.22);
+        padding: 2px 6px;
+        border-radius: 6px;
+        color: var(--text);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin-top: 18px;
+      }
+      .item {
+        padding: 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.18);
+        background: rgba(255,255,255,0.08);
+      }
+      .item b { color: var(--text); }
+      .hint { margin-top: 16px; font-size: 14px; }
+      a { color: white; }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>UIDAI Analytics Hub</h1>
+      <p>
+        This repository is a <b>Streamlit</b> app (<code>app.py</code>). Vercel is primarily designed for static sites and
+        serverless functions; it does not run a persistent Streamlit server, so deployments without a static entrypoint
+        often show Vercel’s <b>NOT_FOUND</b> page.
+      </p>
+
+      <div class="grid">
+        <div class="item">
+          <b>Run locally</b>
+          <p>
+            Install deps and start Streamlit:
+            <code>pip install -r requirements.txt</code> then <code>streamlit run app.py</code>
+          </p>
+        </div>
+        <div class="item">
+          <b>Deploy options (recommended)</b>
+          <p>
+            Use Streamlit Community Cloud, Render, Railway, Fly.io, or any Docker-capable host.
+          </p>
+        </div>
+      </div>
+
+      <p class="hint">
+        If you *intended* this to be a Vercel web app, you’ll want to migrate the UI to a Vercel-native framework (e.g.
+        Next.js) and keep Python analytics behind APIs.
+      </p>
+    </main>
+  </body>
+</html>
+
+
