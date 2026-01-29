@@ -232,7 +232,10 @@ class DataStore:
         window_start, window_end = resolve_window(preset, start, end, self.max_date)
         enrol = self._filter_df(self.datasets["enrol"], state, district, window_start, window_end)
         if enrol.empty:
+            print("Enrol DataFrame is empty after filtering.")
             return []
+
+        print(f"Enrol DataFrame head after filtering:\n{enrol.head()}")
 
         freq_map = {"monthly": "M", "quarterly": "Q", "yearly": "A"}
         freq = freq_map.get(granularity, "M")
@@ -243,8 +246,10 @@ class DataStore:
             .sum()
             .reset_index()
         )
+        print(f"Grouped DataFrame head after resampling:\n{grouped.head()}")
         grouped["total"] = grouped[["age_0_5", "age_5_17", "age_18_greater"]].sum(axis=1)
         grouped["adult_share"] = np.where(grouped["total"] > 0, grouped["age_18_greater"] / grouped["total"], 0)
+        print(f"Grouped DataFrame head after calculating total and adult_share:\n{grouped.head()}")
         return [
             {
                 "date": row["date"].date().isoformat(),
@@ -285,13 +290,14 @@ class DataStore:
             monthly = frame.set_index("date")["age_18_greater"].resample("M").sum()
             growth_pct = calc_growth(monthly)
 
-            if isinstance(key, tuple):
+            if level == "district":
                 state_name, district_name = key
                 name = f"{district_name}, {state_name}"
                 identifier = district_name
-            else:
-                name = key
-                identifier = key
+            else:  # level == "state"
+                state_name = key[0] if isinstance(key, tuple) else key
+                name = state_name
+                identifier = state_name
 
             rows.append(
                 {
@@ -409,7 +415,7 @@ def timeseries(
     preset: Optional[str] = Query(default="6m"),
     start: Optional[str] = Query(default=None),
     end: Optional[str] = Query(default=None),
-    granularity: str = Query(default="monthly", regex="^(monthly|quarterly|yearly)$"),
+    granularity: str = Query(default="monthly", pattern="^(monthly|quarterly|yearly)$"),
 ) -> List[Dict[str, object]]:
     return store.working_age_timeseries(state, district, preset, start, end, granularity)
 
@@ -421,7 +427,7 @@ def map_view(
     preset: Optional[str] = Query(default="6m"),
     start: Optional[str] = Query(default=None),
     end: Optional[str] = Query(default=None),
-    level: str = Query(default="state", regex="^(state|district)$"),
+    level: str = Query(default="state", pattern="^(state|district)$"),
 ) -> List[Dict[str, object]]:
     return store.map_view(state, district, preset, start, end, level)
 
